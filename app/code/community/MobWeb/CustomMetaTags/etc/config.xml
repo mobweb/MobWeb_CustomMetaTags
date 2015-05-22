@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <MobWeb_CustomMetaTags>
+            <version>0.1.0</version>
+        </MobWeb_CustomMetaTags>
+    </modules>
+    <global>
+        <models>
+            <custommetatags>
+                <class>MobWeb_CustomMetaTags_Model</class>
+            </custommetatags>
+        </models>
+        <helpers>
+            <custommetatags>
+                <class>MobWeb_CustomMetaTags_Helper</class>
+            </custommetatags>
+        </helpers>
+    </global>
+    <frontend>
+        <events>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <custommetatags>
+                        <type>singleton</type>
+                        <class>custommetatags/observer</class>
+                        <method>controllerActionLayoutGenerateBlocksAfter</method>
+                    </custommetatags>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+        </events>
+    </frontend>
+ </config>
