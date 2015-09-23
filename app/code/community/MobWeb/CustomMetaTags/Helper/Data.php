@@ -97,6 +97,15 @@ class MobWeb_CustomMetaTags_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	public function createTagsFromTemplateSet($templateSetId, $entity) {
 
+		// Set the cache key for the entity / template combination
+		$cacheKey = get_class($entity) . '_' . $entity->getId() . '_' . $templateSetId;
+
+		// If the processed templates are in the cache, load them from there
+		$cache = Mage::getSingleton('core/cache');
+		if($processedTemplates = $cache->load($cacheKey)) {
+			return unserialize($processedTemplates);
+		}
+
 		// Load the templates from the configuration
 		$templates = Mage::helper('custommetatags')->getTemplates($templateSetId);
 
@@ -105,6 +114,9 @@ class MobWeb_CustomMetaTags_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		// Replace the variables in the templates templates
 		$processedTemplates = Mage::helper('custommetatags')->getProcessedTemplates($templates, $variables);
+
+		// Save the processed templates in the cache
+		$cache->save(serialize($processedTemplates), $cacheKey, array(Mage_Catalog_Model_Product::CACHE_TAG), 60*60*24*7);
 
 		return $processedTemplates;
 	}
