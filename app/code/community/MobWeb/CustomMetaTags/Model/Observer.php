@@ -7,19 +7,63 @@ class MobWeb_CustomMetaTags_Model_Observer
 		// Check the page type we're currently on
 		$controllerName = Mage::app()->getRequest()->getControllerName();
 
+		// Category pages
 		if($controllerName === 'category') {
 
 			// Load the current category
-			$category = Mage::registry('current_category');
+			$entity = Mage::registry('current_category');
 
-			// Get the current category's name
-			$categoryName = $category->getName();
+			// Check the category's "Display Mode". If it set to "Static Block Only", don't overwrite the meta tags
+			if($entity->getDisplayMode() === 'PAGE') {
+				return $observer;
+			}
 
-			// Get a reference to the head block
-			$head = $observer->getLayout()->getBlock('head');
+			// Get the meta tags
+			$metaTags = Mage::helper('custommetatags')->createTagsFromTemplateSet(1, $entity);
+		}
 
-			// Update the head's meta title
-			$head->setTitle(sprintf('%s - Just an example', $categoryName));
+		// Product pages
+		if($controllerName === 'product') {
+
+			// Load the current product
+			$entity = Mage::registry('current_product');
+
+			// Get the meta tags
+			$metaTags = Mage::helper('custommetatags')->createTagsFromTemplateSet(2, $entity);
+		}
+
+		// Check if the meta tags have been created
+		if(isset($metaTags)) {
+
+			// If a meta tag has been set explicitely for the current entity, don't overwrite it
+			if($entity->getMetaTitle()) {
+				$metaTitle = $entity->getMetaTitle();
+			}
+
+			if($entity->getMetaDescription()) {
+				$metaDescription = $entity->getMetaDescription();
+			}
+
+			// Update the meta tags
+			if($head = $observer->getLayout()->getBlock('head')) {
+
+				// Check if a title has been set
+				if(isset($metaTags['title'])) {
+					$head->setTitle($metaTags['title']);
+				}
+
+				// Check if a description has been set
+				if(isset($metaTags['description'])) {
+					$head->setDescription($metaTags['description']);
+				}
+
+				// Check if a keyword string has been set
+				if(isset($metaTags['keywords'])) {
+
+					// For the keywords, ALWAYS append our custom keywords to the existing keywords
+					$head->setKeywords($entity->getMetaKeywords() . ', ' . $metaTags['keywords']);
+				}
+			}
 		}
 
 		return $observer;
