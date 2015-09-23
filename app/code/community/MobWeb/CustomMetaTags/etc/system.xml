@@ -17,9 +17,11 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <comment><![CDATA[
-                      <p>
-                        TODO
-                      </p>
+                        <p>This Magento extension allows you to define up to 10 different template sets for meta tags, meta descriptions and meta keywords. The templates can contain variables and will be processed before the meta tags are rendered on a page.</p>
+
+                        <p>By default, template set 1 is used on category pages and template set 2 is used on product pages. The idea is that you can modify <i>MobWeb_CustomMetaTags_Model_Observer::controllerActionLayoutGenerateBlocksAfter</i> to use the other template sets where it makes sense for you. For example you might use another template set for all subcategories, or for products of a certain product type. This logic will have to be implemented in code.</p>
+
+                        <p>As for the variables, all of an entity's attribute are available by default. For example to insert a product's name you'd use the <i>%NAME%</i> variable or <i>%PRICE%</i> for the price. There are some custom variables that you can see in <i>MobWeb_CustomMetaTags_Helper_Data::getVariables</i> where you can also easily add your own custom variables.</p>
                     ]]></comment>
                 </introduction>
                 <template_set_1 translate="label">
