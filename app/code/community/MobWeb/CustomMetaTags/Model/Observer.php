@@ -37,11 +37,11 @@ class MobWeb_CustomMetaTags_Model_Observer
 
 			// If a meta tag has been set explicitely for the current entity, don't overwrite it
 			if($entity->getMetaTitle()) {
-				$metaTitle = $entity->getMetaTitle();
+				unset($metaTags['title']);
 			}
 
 			if($entity->getMetaDescription()) {
-				$metaDescription = $entity->getMetaDescription();
+				unset($metaTags['description']);
 			}
 
 			// Update the meta tags
