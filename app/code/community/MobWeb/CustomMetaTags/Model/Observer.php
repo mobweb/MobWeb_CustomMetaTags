@@ -61,7 +61,7 @@ class MobWeb_CustomMetaTags_Model_Observer
 				if(isset($metaTags['keywords'])) {
 
 					// For the keywords, ALWAYS append our custom keywords to the existing keywords
-					$head->setKeywords($entity->getMetaKeywords() . ', ' . $metaTags['keywords']);
+					$head->setKeywords(trim($entity->getMetaKeywords() . ', ' . $metaTags['keywords'], ' ,'));
 				}
 			}
 		}
