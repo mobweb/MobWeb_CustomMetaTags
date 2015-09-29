@@ -89,7 +89,7 @@ class MobWeb_CustomMetaTags_Helper_Data extends Mage_Core_Helper_Abstract {
 		foreach($templates AS $templateKey => $template) {
 
 			// Replace the variables in the template with their values
-			$processedTemplates[$templateKey] = str_replace(array_keys($variables), array_values($variables), $template);
+			$processedTemplates[$templateKey] = trim(str_replace(array_keys($variables), array_values($variables), $template), ' ,');
 		}
 
 		return $processedTemplates;
